@@ -8,6 +8,7 @@
 -->
 
 <html lang="ja">
+
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script async src="../../build/dev/prebid.js"></script>
@@ -16,22 +17,45 @@
         var FAILSAFE_TIMEOUT = 3300;
         var PREBID_TIMEOUT = 1000;
 
-        var adUnits = [{
+        var gmossp1 = {
             code: 'div-gpt-ad-1460505748561-0',
             mediaTypes: {
                 banner: {
-                    sizes: [[300, 250], [300,600]],
+                    sizes: [
+                        [300, 250],
+                        [300, 600]
+                    ],
                 }
             },
             // Replace this object to test a new Adapter!
             bids: [{
                 bidder: 'gmossp',
                 params: {
-                    placementId: 13144370
+                    sid: 12345
                 }
             }]
+        };
 
-        }];
+        var gmossp2 = {
+            code: 'div-gpt-ad-1541556546887-0',
+            mediaTypes: {
+                banner: {
+                    sizes: [
+                        [300, 250],
+                        [300, 600]
+                    ],
+                }
+            },
+            // Replace this object to test a new Adapter!
+            bids: [{
+                bidder: 'gmossp',
+                params: {
+                    sid: 67890
+                }
+            }]
+        };
+
+        var adUnits = [gmossp1, gmossp2];
 
         var pbjs = pbjs || {};
         pbjs.que = pbjs.que || [];
@@ -41,11 +65,11 @@
     <script>
         var googletag = googletag || {};
         googletag.cmd = googletag.cmd || [];
-        googletag.cmd.push(function() {
+        googletag.cmd.push(function () {
             googletag.pubads().disableInitialLoad();
         });
 
-        pbjs.que.push(function() {
+        pbjs.que.push(function () {
             pbjs.addAdUnits(adUnits);
             pbjs.requestBids({
                 bidsBackHandler: sendAdserverRequest,
@@ -56,15 +80,15 @@
         function sendAdserverRequest() {
             if (pbjs.adserverRequestSent) return;
             pbjs.adserverRequestSent = true;
-            googletag.cmd.push(function() {
-                pbjs.que.push(function() {
+            googletag.cmd.push(function () {
+                pbjs.que.push(function () {
                     pbjs.setTargetingForGPTAsync();
                     googletag.pubads().refresh();
                 });
             });
         }
 
-        setTimeout(function() {
+        setTimeout(function () {
             sendAdserverRequest();
         }, FAILSAFE_TIMEOUT);
 
@@ -72,21 +96,35 @@
 
     <script>
         googletag.cmd.push(function () {
-            googletag.defineSlot('/19968336/header-bid-tag-0', [[300, 250], [300, 600]], 'div-gpt-ad-1460505748561-0').addService(googletag.pubads());
+            googletag.defineSlot('/19968336/header-bid-tag-0', [
+                [300, 250],
+                [300, 600]
+            ], 'div-gpt-ad-1460505748561-0').addService(googletag.pubads());
+            googletag.defineSlot('/171191212/merumopcinfeed/merumopcinfeed1', [[1, 1], 'fluid'], 'div-gpt-ad-1541556546887-0').addService(googletag.pubads());
 
             googletag.pubads().enableSingleRequest();
             googletag.enableServices();
         });
+
     </script>
 </head>
 
 <body>
-<h2>Prebid.js Test</h2>
-<h5>Div-1</h5>
-<div id='div-gpt-ad-1460505748561-0'>
-    <script type='text/javascript'>
-        googletag.cmd.push(function() { googletag.display('div-gpt-ad-1460505748561-0'); });
-    </script>
-</div>
+    <h2>Prebid.js Test</h2>
+    <h5>Div-1</h5>
+    <div id='div-gpt-ad-1460505748561-0'>
+        <script type='text/javascript'>
+            googletag.cmd.push(function () {
+                googletag.display('div-gpt-ad-1460505748561-0');
+            });
+
+        </script>
+    </div>
+    <div id='div-gpt-ad-1541556546887-0' style="margin-top: 25px;">
+        <script>
+        googletag.cmd.push(function() { googletag.display('div-gpt-ad-1541556546887-0'); });
+        </script>
+    </div>
 </body>
+
 </html>
