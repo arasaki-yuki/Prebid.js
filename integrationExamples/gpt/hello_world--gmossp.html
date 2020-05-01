@@ -18,7 +18,8 @@
         var PREBID_TIMEOUT = 1000;
 
         var gmossp1 = {
-            code: 'div-gpt-ad-1460505748561-0',
+            // code: 'div-gpt-ad-1460505748561-0',
+            code: 'div-gpt-ad-1588309643879-0',
             mediaTypes: {
                 banner: {
                     sizes: [
@@ -37,20 +38,19 @@
         };
 
         var gmossp2 = {
-            code: 'div-gpt-ad-1541556546887-0',
+            code: 'div-gpt-ad-1544152766692-0',
             mediaTypes: {
                 banner: {
                     sizes: [
-                        [300, 250],
-                        [300, 600]
-                    ],
+                        [300, 250]
+                    ]
                 }
             },
             // Replace this object to test a new Adapter!
             bids: [{
-                bidder: 'gmossp',
+                bidder: 'aja',
                 params: {
-                    sid: 67890
+                    asi: 'PL6TdUvWR'
                 }
             }]
         };
@@ -70,6 +70,21 @@
         });
 
         pbjs.que.push(function () {
+            // const customConfigObject = {
+            //     "buckets" : [{
+            //         "max" : 40,
+            //         "increment" : 0.5   // from $8 to $40, round down to the previous 50-cent increment
+            //     }]
+            // };
+
+            // pbjs.setConfig({
+            //     enableSendAllBids: true,
+            //     targetingControls: {
+            //         alwaysIncludeDeals: true
+            //     },
+            //     priceGranularity: customConfigObject
+            // });
+
             pbjs.addAdUnits(adUnits);
             pbjs.requestBids({
                 bidsBackHandler: sendAdserverRequest,
@@ -96,12 +111,9 @@
 
     <script>
         googletag.cmd.push(function () {
-            googletag.defineSlot('/19968336/header-bid-tag-0', [
-                [300, 250],
-                [300, 600]
-            ], 'div-gpt-ad-1460505748561-0').addService(googletag.pubads());
-            googletag.defineSlot('/171191212/merumopcinfeed/merumopcinfeed1', [[1, 1], 'fluid'], 'div-gpt-ad-1541556546887-0').addService(googletag.pubads());
-
+            // googletag.defineSlot('/19968336/header-bid-tag-0', [[300, 250], [300, 600]], 'div-gpt-ad-1460505748561-0').addService(googletag.pubads());
+            googletag.defineSlot('/21798974125/test-unit-for-gmosspBidAdapter', [[1, 1], [300, 250]], 'div-gpt-ad-1588309643879-0').addService(googletag.pubads());
+            googletag.defineSlot('/171191212/recommend_above/category_above1', [[1, 1], [300, 250]], 'div-gpt-ad-1544152766692-0').addService(googletag.pubads());
             googletag.pubads().enableSingleRequest();
             googletag.enableServices();
         });
@@ -112,19 +124,25 @@
 <body>
     <h2>Prebid.js Test</h2>
     <h5>Div-1</h5>
-    <div id='div-gpt-ad-1460505748561-0'>
+    <!-- <div id='div-gpt-ad-1460505748561-0'>
         <script type='text/javascript'>
             googletag.cmd.push(function () {
                 googletag.display('div-gpt-ad-1460505748561-0');
             });
 
         </script>
-    </div>
-    <div id='div-gpt-ad-1541556546887-0' style="margin-top: 25px;">
+    </div> -->
+    <!-- /21798974125/test-unit-for-gmosspBidAdapter -->
+    <div id='div-gpt-ad-1588309643879-0'>
         <script>
-        googletag.cmd.push(function() { googletag.display('div-gpt-ad-1541556546887-0'); });
+        googletag.cmd.push(function() { googletag.display('div-gpt-ad-1588309643879-0'); });
+        </script>
+    </div>
+    <!-- /171191212/recommend_above/category_above1 -->
+    <div id='div-gpt-ad-1544152766692-0' class="u-mt-4" style="text-align:center">
+        <script>
+        googletag.cmd.push(function() { googletag.display('div-gpt-ad-1544152766692-0'); });
         </script>
     </div>
 </body>
-
 </html>
