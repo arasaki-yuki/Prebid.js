@@ -3,7 +3,7 @@
 ```
 Module Name: GMOSSP Bid Adapter
 Module Type: Bidder Adapter
-Maintainer: 
+Maintainer:  dev@ml.gmo-am.jp
 ```
 
 # Description
@@ -28,7 +28,7 @@ var adUnits = [
         bids: [{
             bidder: 'gmossp',
             params: {
-                sid: ''
+                sid: '61590'
             }
         }]
     }
