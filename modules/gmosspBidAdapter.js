@@ -4,7 +4,8 @@ import { config } from '../src/config.js';
 import { BANNER, NATIVE } from '../src/mediaTypes.js';
 
 const BIDDER_CODE = 'gmossp';
-const ENDPOINT = 'http://localhost:3000';
+// const ENDPOINT = 'http://localhost:3000';
+const ENDPOINT = 'https://arasaki-ad.devel.sp.gmossp-sp.jp/hb/prebid/query.ad';
 
 export const spec = {
   code: BIDDER_CODE,
@@ -20,6 +21,7 @@ export const spec = {
      */
     return !!(bid.params.sid);
   },
+
   buildRequests: function (validBidRequests, bidderRequest) {
     const bidRequests = [];
 
@@ -27,11 +29,6 @@ export const spec = {
     const cur = getCurrencyType();
     const dnt = utils.getDNT() ? '1' : '0';
 
-    /**
-     * TODO:
-     * [] サンプルページに複数枠設定
-     *      GAMでサンプル枠作る
-     */
     for (let i = 0; i < validBidRequests.length; i++) {
       let queryString = '';
 
@@ -55,43 +52,82 @@ export const spec = {
         data: queryString
       });
     }
-
     return bidRequests;
   },
 
   interpretResponse: function (bidderResponse, requests) {
+    const bid = [];
     const res = bidderResponse.body;
-    const requestId = res.bid;
-    const cpm = res.price;
-    const currency = res.cur;
-    const width = res.w;
-    const height = res.h;
-    const ad = res.ad;
-    const ttl = res.ttl || 300;
-    const creativeId = res.cid;
-    const netRevenue = true;
+
+    if (utils.isEmpty(res)) {
+      return bid;
+    }
 
     /**
  * TODO:
  * adagioBidAdapterのようにbidderResponseの中のbidId(bid)とrequestsの中にあるbidの突合処理を行う
+ * - usersync、その他のオプションの実装
+ * - testファイル作成
+ * - 該当しないIDがある場合の挙動
+ * - handles no bid response
  */
+    try {
+      res.imps.forEach(impTracker => {
+        const tracker = utils.createTrackPixelHtml(impTracker);
+        res.ad += tracker;
+      });
+    } catch (error) {
+      utils.logError('Error appending tracking pixel', error);
+    }
 
-    const bid = {
-      requestId,
-      cpm,
-      currency,
-      width,
-      height,
-      ad,
-      creativeId,
-      netRevenue,
-      ttl
+    const data = {
+      requestId: res.bid,
+      cpm: res.price,
+      currency: res.cur,
+      width: res.w,
+      height: res.h,
+      ad: res.ad,
+      creativeId: res.creativeId,
+      netRevenue: true,
+      ttl: res.ttl || 300
     };
 
-    return [bid];
+    bid.push(data);
+
+    return bid;
   },
 
-  getUserSyncs: function (syncOptions, serverResponse) {},
+  getUserSyncs: function(syncOptions, serverResponses) {
+    const syncs = [];
+    if (!serverResponses.length) {
+      return syncs;
+    }
+
+    serverResponses.forEach(res => {
+      if (syncOptions.pixelEnabled && res.body && res.body.syncs.length) {
+        res.body.syncs.forEach(sync => {
+          syncs.push({
+            type: 'image',
+            url: sync
+          })
+        })
+      }
+    })
+
+    /*
+    if (syncOptions.iframeEnabled && bidderResponseBody.sync_htmls) {
+      bidderResponseBody.sync_htmls.forEach(sync => {
+        syncs.push({
+          type: 'iframe',
+          url: sync
+        });
+      });
+    }
+    */
+
+    return syncs;
+  },
+
 };
 
 /**
