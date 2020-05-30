@@ -133,7 +133,7 @@ describe('GmosspAdapter', function () {
     it('handles nobid responses', function () {
       const response = '';
 
-      const result = spec.interpretResponse({ body: response }, {bidderRequests});
+      const result = spec.interpretResponse({ body: response }, bidderRequests);
       expect(result.length).to.equal(0);
     });
   });
