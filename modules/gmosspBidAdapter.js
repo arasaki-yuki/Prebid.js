@@ -134,7 +134,9 @@ export const spec = {
  * @return {?string} USD or JPY
  */
 function getCurrencyType() {
-  if (config.getConfig('currency.adServerCurrency') && config.getConfig('currency.adServerCurrency').toUpperCase() === 'USD') return 'USD';
+  if (config.getConfig('currency.adServerCurrency')) {
+    return config.getConfig('currency.adServerCurrency');
+  }
   return 'JPY';
 }
 
