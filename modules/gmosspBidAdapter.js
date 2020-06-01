@@ -1,19 +1,31 @@
 import { registerBidder } from '../src/adapters/bidderFactory.js';
 import * as utils from '../src/utils.js';
 import { config } from '../src/config.js';
-import { BANNER, NATIVE } from '../src/mediaTypes.js';
+import { BANNER } from '../src/mediaTypes.js';
 
 const BIDDER_CODE = 'gmossp';
 const ENDPOINT = 'https://arasaki-ad.devel.sp.gmossp-sp.jp/hb/prebid/query.ad';
 
 export const spec = {
   code: BIDDER_CODE,
-  supportedMediaTypes: [BANNER, NATIVE],
+  supportedMediaTypes: [BANNER],
 
+  /**
+   * Determines whether or not the given bid request is valid.
+   *
+   * @param {BidRequest} bid The bid params to validate.
+   * @return boolean True if this is a valid bid, and false otherwise.
+   */
   isBidRequestValid: function (bid) {
     return !!(bid.params.sid);
   },
 
+  /**
+   * Make a server request from the list of BidRequests.
+   *
+   * @param {validBidRequests[]} - an array of bids
+   * @return ServerRequest Info describing the request to the server.
+   */
   buildRequests: function (validBidRequests, bidderRequest) {
     const bidRequests = [];
 
@@ -47,12 +59,17 @@ export const spec = {
     return bidRequests;
   },
 
+  /**
+   * Unpack the response from the server into a list of bids.
+   *
+   * @param {*} serverResponse A successful response from the server.
+   * @return {Bid[]} An array of bids which were nested inside the server.
+   */
   interpretResponse: function (bidderResponse, requests) {
-    const bid = [];
     const res = bidderResponse.body;
 
     if (utils.isEmpty(res)) {
-      return bid;
+      return [];
     }
 
     try {
@@ -64,7 +81,7 @@ export const spec = {
       utils.logError('Error appending tracking pixel', error);
     }
 
-    const data = {
+    const bid = {
       requestId: res.bid,
       cpm: res.price,
       currency: res.cur,
@@ -76,11 +93,16 @@ export const spec = {
       ttl: res.ttl || 300
     };
 
-    bid.push(data);
-
-    return bid;
+    return [bid];
   },
 
+  /**
+   * Register the user sync pixels which should be dropped after the auction.
+   *
+   * @param {SyncOptions} syncOptions Which user syncs are allowed?
+   * @param {ServerResponse[]} serverResponses List of server's responses.
+   * @return {UserSync[]} The user syncs which should be dropped.
+   */
   getUserSyncs: function(syncOptions, serverResponses) {
     const syncs = [];
     if (!serverResponses.length) {
@@ -103,9 +125,6 @@ export const spec = {
 
 };
 
-/**
- * @return {?string} USD or JPY
- */
 function getCurrencyType() {
   if (config.getConfig('currency.adServerCurrency')) {
     return config.getConfig('currency.adServerCurrency');
