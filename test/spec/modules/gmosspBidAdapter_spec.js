@@ -137,4 +137,23 @@ describe('GmosspAdapter', function () {
       expect(result.length).to.equal(0);
     });
   });
+  describe('getUserSyncs', function () {
+    const bidResponse = {
+      body: {
+        ad: {},
+        syncs: [
+          'https://hoge.com'
+        ]
+      }
+    };
+    it('should return true ', function () {
+      const syncs = spec.getUserSyncs({ pixelEnabled: true, iframeEnabled: true }, [bidResponse]);
+      expect(syncs).to.deep.equal([
+        {
+          type: 'image',
+          url: 'https://hoge.com'
+        }
+      ])
+    })
+  });
 });
