@@ -105,7 +105,7 @@ describe('GmosspAdapter', function () {
           'https://sync.dsp.reemo-ad.jp'
         ],
         ttl: 300
-      }
+      };
 
       const expectedResponse = [
         {
@@ -119,7 +119,8 @@ describe('GmosspAdapter', function () {
           netRevenue: true,
           ttl: 300
         }
-      ]
+      ];
+
       const result = spec.interpretResponse({ body: response }, bidderRequests);
       expect(result).to.have.lengthOf(1);
 
@@ -127,6 +128,7 @@ describe('GmosspAdapter', function () {
         const tracker = utils.createTrackPixelHtml(impTracker);
         expectedResponse[0].ad += tracker;
       });
+
       expect(result).to.deep.have.same.members(expectedResponse);
     });
 
@@ -137,6 +139,7 @@ describe('GmosspAdapter', function () {
       expect(result.length).to.equal(0);
     });
   });
+
   describe('getUserSyncs', function () {
     const bidResponse = {
       body: {
@@ -146,7 +149,7 @@ describe('GmosspAdapter', function () {
         ]
       }
     };
-    it('should return true ', function () {
+    it('should return returns pixel syncs', function () {
       const syncs = spec.getUserSyncs({ pixelEnabled: true, iframeEnabled: true }, [bidResponse]);
       expect(syncs).to.deep.equal([
         {
