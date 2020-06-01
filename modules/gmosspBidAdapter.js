@@ -4,7 +4,6 @@ import { config } from '../src/config.js';
 import { BANNER, NATIVE } from '../src/mediaTypes.js';
 
 const BIDDER_CODE = 'gmossp';
-// const ENDPOINT = 'http://localhost:3000';
 const ENDPOINT = 'https://arasaki-ad.devel.sp.gmossp-sp.jp/hb/prebid/query.ad';
 
 export const spec = {
@@ -12,13 +11,6 @@ export const spec = {
   supportedMediaTypes: [BANNER, NATIVE],
 
   isBidRequestValid: function (bid) {
-    /**
-     * TODO:
-     * 何を必須とするかまとめる
-     * [x] sid //space_id
-     * [] currencyについてこの時点でわかるか否か
-     *  [] currencyが設定されていない場合の挙動確認
-     */
     return !!(bid.params.sid);
   },
 
@@ -63,14 +55,6 @@ export const spec = {
       return bid;
     }
 
-    /**
- * TODO:
- * adagioBidAdapterのようにbidderResponseの中のbidId(bid)とrequestsの中にあるbidの突合処理を行う
- * - usersync、その他のオプションの実装
- * - testファイル作成
- * - 該当しないIDがある場合の挙動
- * - handles no bid response
- */
     try {
       res.imps.forEach(impTracker => {
         const tracker = utils.createTrackPixelHtml(impTracker);
@@ -113,17 +97,6 @@ export const spec = {
         })
       }
     })
-
-    /*
-    if (syncOptions.iframeEnabled && bidderResponseBody.sync_htmls) {
-      bidderResponseBody.sync_htmls.forEach(sync => {
-        syncs.push({
-          type: 'iframe',
-          url: sync
-        });
-      });
-    }
-    */
 
     return syncs;
   },
