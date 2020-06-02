@@ -23,7 +23,8 @@
             mediaTypes: {
                 banner: {
                     sizes: [
-                        [300, 250]
+                        [320, 50],
+                        // [300, 250]
                     ],
                 }
             },
@@ -31,8 +32,8 @@
             bids: [{
                 bidder: 'gmossp',
                 params: {
-                    sid: '61590'
-                    // sid: '12345'
+                    // sid: '61590'
+                    sid: '66122'
                 }
             }]
         },
@@ -41,7 +42,7 @@
             mediaTypes: {
                 banner: {
                     sizes: [
-                        [300, 250]
+                        [300, 250],
                     ],
                 }
             },
@@ -49,7 +50,8 @@
             bids: [{
                 bidder: 'gmossp',
                 params: {
-                    sid: '66019'
+                    // sid: '66122'
+                    sid: '61590'
                     // sid: '12345'
                 }
             }]
@@ -114,23 +116,6 @@
                 },
                 bidderTimeout: 2000
             })
-
-            /*
-            const customConfigObject = {
-                "buckets" : [{
-                    "max" : 40,
-                    "increment" : 0.5   // from $8 to $40, round down to the previous 50-cent increment
-                }]
-            };
-
-            pbjs.setConfig({
-                enableSendAllBids: true,
-                targetingControls: {
-                    alwaysIncludeDeals: true
-                },
-                priceGranularity: customConfigObject
-            });
-            */
 
             pbjs.addAdUnits(adUnits);
             pbjs.requestBids({
