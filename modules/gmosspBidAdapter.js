@@ -4,7 +4,7 @@ import { config } from '../src/config.js';
 import { BANNER } from '../src/mediaTypes.js';
 
 const BIDDER_CODE = 'gmossp';
-const ENDPOINT = 'https://arasaki-ad.devel.sp.gmossp-sp.jp/hb/prebid/query.ad';
+const ENDPOINT = 'https://sp.gmossp-sp.jp/hb/prebid/query.ad';
 
 export const spec = {
   code: BIDDER_CODE,
